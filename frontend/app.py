@@ -4,7 +4,7 @@ from pathlib import Path
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
-from backend.app_functions import get_rates, convert, format_history
+from backend.app_functions import get_rates, convert, format_history  # noqa: E402
 
 st.title("Convertisseur de devises")
 
@@ -31,7 +31,7 @@ amount = st.number_input("Montant :", min_value=0.0, format="%.2f")
 if st.button("Inverser"):
     st.session_state.from_currency, st.session_state.to_currency = (
         st.session_state.to_currency,
-        st.session_state.from_currency
+        st.session_state.from_currency,
     )
 
 col1, col2 = st.columns(2)
@@ -46,10 +46,16 @@ if st.button("Convertir"):
     try:
         result = convert(amount, from_currency, to_currency, rates)
     except ValueError:
-        st.warning(f"Devises identiques ({from_currency}) : choisissez deux devises différentes.")
+        st.warning(
+            f"Devises identiques ({from_currency}) : "
+            "choisissez deux devises différentes."
+        )
     else:
         if result is None:
-            st.error(f"Montant invalide ({amount:.2f}) : il doit être strictement supérieur à 0.")
+            st.error(
+                f"Montant invalide ({amount:.2f}) : "
+                "il doit être strictement supérieur à 0."
+            )
         else:
             st.success(f"{amount} {from_currency} = {result:.2f} {to_currency}")
             st.session_state.history.append(
