@@ -10,10 +10,10 @@ to_currency = st.selectbox("Vers :", rates.keys())
 if st.button("Convertir"):
     try:
         result = convert(amount, from_currency, to_currency, rates)
-    except ValueError as e:
-        st.error(str(e))
+    except ValueError:
+        st.warning(f"Devises identiques ({from_currency}) : choisissez deux devises différentes.")
     else:
         if result is None:
-            st.error("Le montant doit être strictement supérieur à 0.")
+            st.error(f"Montant invalide ({amount:.2f}) : il doit être strictement supérieur à 0.")
         else:
             st.success(f"{amount} {from_currency} = {result:.2f} {to_currency}")
