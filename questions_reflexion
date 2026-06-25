@@ -1,0 +1,41 @@
+1) Comment organiser le travail en groupe avec des branches (feature/api, bugfix/zero-value…)?
+
+La branche main principale ne contient que le code testé et fiable. Chaque membre du groupe travail sur ses propres branche avec des nom explicite. Si c'est une branche pour une nouvelle fonctionnalités alors "feature/nom-fonctionnalités"
+si hotfix: "hotfix/nom-correction", etc. De plus avec l'utilisation des issues sur git alors chaque issues est reliées à une branche de développement.
+
+
+
+2) Quels avantages apportent les Pull Requests par rapport à un push direct sur main?
+
+Ils permettent de déclancher une CI pour executer des tests, de faire analyser son code avec les review des autres membres de l'équipe, de protéger branche principale. 
+
+3) Qu’est-ce qu’un test unitaire et pourquoi est-il important?
+    Les tests unitaires est un test qui permet de vérifier une fonction ou une partie du code uniquement de manière isolée sans prendre en compte tout le contexte de l'application. 
+
+4) Pourquoi automatiser les tests dans GitHub Actions avant d’accepter une PR?
+Cela permet d'automatiser les tests à chaque PR et de vérifier que les nouvelles modifications n'apporte pas d'erreurs avant le merge dans la branche main. Cela fait gagner du temps, évite les régréssions et permet de détécter rapidements les erreurs.
+
+
+5) Quelles dettes techniques observez-vous dans le code initial?
+Toute la logique et l'interface sont regroupées dans le même fichier ce qui rend plus difficile les tests et la maintenance, les taux de changes sont définis en dur directement, il n'y a aucune de gestion d'erreurs.
+
+6) Quelles modifications ont amélioré la maintenabilité et la lisibilité?
+
+Déplacer la logique de conversion dans une fonction dans un fichier de backend. Nous avons ajoutés des tests unitaires dans un fichier test_app.py qui s'execute à chaque PR vers la main grâce au workflow Github.
+
+7) Classez vos modifications selon les quatre types de maintenance.
+Ajouter vérification pour les montants nuls ou négatifs: corrective
+vérifier que la devise cible et source sont différentes: corrective
+afficher un message d'erreur si les conditions ne sont pas respectée: corrective
+
+Mise en place d'un workflow Github AActions: Maintenance perfective
+Remplacer les taux de conversions codé en dur en les récupérant via une API: Maintenance  adaptative
+
+
+Implémenter un historique de conversation: Maintenance évolutive
+Ajouter un bouton pour inverser les devises sélectionnées: maintenance évolutive
+Ajouter 2 nouvelles devises: Evolutive
+
+
+8) Quelle partie vous semble la plus fréquente dans un projet réel?
+La maintenance la plus fréquente dans un projet réel est la maintenance évolutive car une application a souvent besoin de s'adapter au  nouveau besoin des utilisateurs
