@@ -1,33 +1,41 @@
-import pytest
+import os
 
-from backend.app_functions import rates, convert, format_history
+import requests
+from dotenv import load_dotenv
 
+load_dotenv()
 
-def test_convert_usd_to_eur():
-    result = convert(11, "USD", "EUR", rates)
-    assert result == 10
-
-
-def test_convert_eur_to_usd():
-    result = convert(10, "EUR", "USD", rates)
-    assert result == 11
-
-
-def test_convert_returns_none_when_amount_is_zero():
-    result = convert(0, "EUR", "USD", rates)
-    assert result is None
+rates = {
+    "EUR": 1,
+    "USD": 1.1,
+    "JPY": 130,
+    "GBP": 0.85,
+    "CAD": 1.5,
+}
 
 
-def test_convert_returns_none_when_amount_is_negative():
-    result = convert(-5, "EUR", "USD", rates)
-    assert result is None
+def get_rates(api_key=None, base="EUR"):
+    if api_key is None:
+        api_key = os.environ.get("EXCHANGE_API_KEY", "")
+    if not api_key:
+        return rates
+    url = f"https://v6.exchangerate-api.com/v6/{api_key}/latest/{base}"
+    try:
+        data = requests.get(url, timeout=10).json()
+        if data.get("result") == "success":
+            return data["conversion_rates"]
+    except requests.RequestException:
+        pass
+    return rates
 
 
-def test_convert_same_currency_raises_value_error():
-    with pytest.raises(ValueError):
-        convert(10, "EUR", "EUR", rates)
+def convert(amount, from_currency, to_currency, rates):
+    if amount <= 0:
+        return None
+    if from_currency == to_currency:
+        raise ValueError("Choisissez deux devises différentes.")
+    return amount * rates[to_currency] / rates[from_currency]
 
 
-def test_format_history():
-    result = format_history(10, "EUR", "USD", 11)
-    assert result == "10.00 EUR = 11.00 USD"
+def format_history(amount, from_currency, to_currency, result):
+    return f"{amount:.2f} {from_currency} = {result:.2f} {to_currency}"
