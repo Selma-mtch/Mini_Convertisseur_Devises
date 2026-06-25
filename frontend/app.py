@@ -49,7 +49,6 @@ with col2:
     )
 
 if st.button("Convertir"):
-    st.success(f"{amount} {from_currency} = {result:.2f} {to_currency}")
     try:
         result = convert(amount, from_currency, to_currency, rates)
     except ValueError as e:
