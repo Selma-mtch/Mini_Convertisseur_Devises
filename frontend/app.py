@@ -4,11 +4,18 @@ from pathlib import Path
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
-from backend.app_functions import rates, convert, format_history
+from backend.app_functions import get_rates, convert, format_history
 
 st.title("Convertisseur de devises")
 
-currencies = list(rates.keys())
+
+@st.cache_data(ttl=3600)
+def load_rates():
+    return get_rates()
+
+
+rates = load_rates()
+currencies = [c for c in ["EUR", "USD", "JPY", "GBP", "CAD"] if c in rates]
 
 if "from_currency" not in st.session_state:
     st.session_state.from_currency = "EUR"
@@ -30,20 +37,10 @@ if st.button("Inverser"):
 col1, col2 = st.columns(2)
 
 with col1:
-    from_currency = st.selectbox(
-        "De :",
-        currencies,
-        index=currencies.index(st.session_state.from_currency),
-        key="from_currency"
-    )
+    from_currency = st.selectbox("De :", currencies, key="from_currency")
 
 with col2:
-    to_currency = st.selectbox(
-        "Vers :",
-        currencies,
-        index=currencies.index(st.session_state.to_currency),
-        key="to_currency"
-    )
+    to_currency = st.selectbox("Vers :", currencies, key="to_currency")
 
 if st.button("Convertir"):
     try:
