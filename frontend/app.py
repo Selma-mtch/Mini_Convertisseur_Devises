@@ -4,7 +4,7 @@ from pathlib import Path
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
-from backend.app_functions import rates, convert
+from backend.app_functions import rates, convert, format_history
 
 st.title("Convertisseur de devises")
 
@@ -15,9 +15,6 @@ if "from_currency" not in st.session_state:
 
 if "to_currency" not in st.session_state:
     st.session_state.to_currency = "USD"
-from backend.app_functions import rates, convert, format_history
-
-st.title("Convertisseur de devises")
 
 if "history" not in st.session_state:
     st.session_state.history = []
