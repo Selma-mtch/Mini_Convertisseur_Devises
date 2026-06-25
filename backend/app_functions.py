@@ -6,4 +6,3 @@ rates = {
 
 def convert(amount, from_currency, to_currency):
     return amount * rates[to_currency] / rates[from_currency]
-
