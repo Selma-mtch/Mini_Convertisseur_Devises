@@ -1,8 +1,6 @@
 import streamlit as st
 from backend.app_functions import rates, convert
 
-from app_functions import convert
-
 st.title("Convertisseur de devises")
 
 amount = st.number_input("Montant :", min_value=0.0, format="%.2f")
